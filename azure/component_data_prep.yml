@@ -1,0 +1,19 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+type: command
+name: data_prep_component
+display_name: data_prep_component
+inputs:
+  input_data:
+    type: uri_file
+outputs:
+  train_output:
+    type: uri_folder
+  test_output:
+    type: uri_folder
+code: ../src
+environment: azureml://registries/azureml/environments/sklearn-1.5/labels/latest
+command: >-
+  python data_prep.py
+  --input_data ${{inputs.input_data}}
+  --train_output ${{outputs.train_output}}
+  --test_output ${{outputs.test_output}}

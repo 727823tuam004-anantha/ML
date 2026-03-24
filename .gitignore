@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.venv/
+venv/
+outputs/
+*.log
+mlruns/
+data/dataset_diabetes/
+data/dataset_diabetes.zip

@@ -1,0 +1,28 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandComponent.schema.json
+type: command
+name: train_component
+display_name: train_component
+inputs:
+  train_data:
+    type: uri_folder
+  student_name:
+    type: string
+  roll_number:
+    type: string
+  dataset_name:
+    type: string
+outputs:
+  model_output:
+    type: uri_folder
+  metrics_output:
+    type: uri_folder
+code: ../src
+environment: azureml://registries/azureml/environments/sklearn-1.5/labels/latest
+command: >-
+  python train_pipeline.py
+  --train_data ${{inputs.train_data}}
+  --model_output ${{outputs.model_output}}
+  --metrics_output ${{outputs.metrics_output}}
+  --student_name "${{inputs.student_name}}"
+  --roll_number "${{inputs.roll_number}}"
+  --dataset_name "${{inputs.dataset_name}}"

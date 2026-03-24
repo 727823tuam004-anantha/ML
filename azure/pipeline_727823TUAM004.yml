@@ -1,0 +1,37 @@
+$schema: https://azuremlschemas.azureedge.net/latest/pipelineJob.schema.json
+type: pipeline
+display_name: hospital_readmission_pipeline
+experiment_name: SKCT_727823TUAM004_HospitalReadmission
+settings:
+  default_compute: azureml:cpu-cluster
+
+inputs:
+  raw_data:
+    type: uri_file
+    path: azureml:diabetes_data:1
+  student_name: "Anantha Narayanan A B"
+  roll_number: "727823TUAM004"
+  dataset_name: "HospitalReadmission"
+
+jobs:
+  data_prep_job:
+    type: command
+    component: ./component_data_prep.yml
+    inputs:
+      input_data: ${{parent.inputs.raw_data}}
+
+  train_job:
+    type: command
+    component: ./component_train.yml
+    inputs:
+      train_data: ${{parent.jobs.data_prep_job.outputs.train_output}}
+      student_name: ${{parent.inputs.student_name}}
+      roll_number: ${{parent.inputs.roll_number}}
+      dataset_name: ${{parent.inputs.dataset_name}}
+
+  evaluate_job:
+    type: command
+    component: ./component_evaluate.yml
+    inputs:
+      test_data: ${{parent.jobs.data_prep_job.outputs.test_output}}
+      model_input: ${{parent.jobs.train_job.outputs.model_output}}
